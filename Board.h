@@ -39,10 +39,12 @@ struct Board
 		if (randomPool.empty()) return;
 		int rnd = rand() % randomPool.size();
 		int x = randomPool[rnd].first, y = randomPool[rnd].second;
-		table[x][y] = new Tile(2);
+		int val = rand() % 10;
+		if (val == 4) table[x][y] = new Tile(4);
+		else table[x][y] = new Tile(2);
 	}
 
-	void move(char dir)
+	bool move(char dir)
 	{
 		if (dir == 'w' || dir == 'W')
 		{
@@ -59,12 +61,14 @@ struct Board
 						table[target - 1][col]->mergeWith(table[row][col]);
 						delete table[row][col];
 						table[row][col] = nullptr;
+						return true;
 					}
 
 					else if (target != row)
 					{
 						table[target][col] = table[row][col];
 						table[row][col] = nullptr;
+						return true;
 					}
 				}
 			}
@@ -85,12 +89,14 @@ struct Board
 						table[target + 1][col]->mergeWith(table[row][col]);
 						delete table[row][col];
 						table[row][col] = nullptr;
+						return true;
 					}
 
 					else if (target != row)
 					{
 						table[target][col] = table[row][col];
 						table[row][col] = nullptr;
+						return true;
 					}
 				}
 			}
@@ -111,12 +117,14 @@ struct Board
 						table[row][target - 1]->mergeWith(table[row][col]);
 						delete table[row][col];
 						table[row][col] = nullptr;
+						return true;
 					}
 
 					else if (target != col)
 					{
 						table[row][target] = table[row][col];
 						table[row][col] = nullptr;
+						return true;
 					}
 				}
 			}
@@ -137,19 +145,22 @@ struct Board
 						table[row][target + 1]->mergeWith(table[row][col]);
 						delete table[row][col];
 						table[row][col] = nullptr;
+						return true;
 					}
 
 					else if (target != col)
 					{
 						table[row][target] = table[row][col];
 						table[row][col] = nullptr;
+						return true;
 					}
 				}
 			}
 		}
+		return false;
 	}
 
-	bool isFull()
+	bool isFull() 
 	{
 		for (int row = 0; row < SIZE; row++)
 			for (int col = 0; col < SIZE; col++)
