@@ -45,7 +45,8 @@ struct Board
 	}
 
 	bool move(char dir)
-	{
+	{   
+		bool moved = false;
 		if (dir == 'w' || dir == 'W')
 		{
 			for (int col = 0; col < SIZE; col++)
@@ -61,14 +62,14 @@ struct Board
 						table[target - 1][col]->mergeWith(table[row][col]);
 						delete table[row][col];
 						table[row][col] = nullptr;
-						return true;
+						moved = true;
 					}
 
-					else if (target != row)
+					else if (!table[target][col]&&target != row)
 					{
 						table[target][col] = table[row][col];
 						table[row][col] = nullptr;
-						return true;
+						moved = true;
 					}
 				}
 			}
@@ -89,14 +90,14 @@ struct Board
 						table[target + 1][col]->mergeWith(table[row][col]);
 						delete table[row][col];
 						table[row][col] = nullptr;
-						return true;
+						moved = true;
 					}
 
 					else if (target != row)
 					{
 						table[target][col] = table[row][col];
 						table[row][col] = nullptr;
-						return true;
+						moved= true;
 					}
 				}
 			}
@@ -117,14 +118,14 @@ struct Board
 						table[row][target - 1]->mergeWith(table[row][col]);
 						delete table[row][col];
 						table[row][col] = nullptr;
-						return true;
+						moved= true;
 					}
 
 					else if (target != col)
 					{
 						table[row][target] = table[row][col];
 						table[row][col] = nullptr;
-						return true;
+						moved = true;
 					}
 				}
 			}
@@ -145,19 +146,19 @@ struct Board
 						table[row][target + 1]->mergeWith(table[row][col]);
 						delete table[row][col];
 						table[row][col] = nullptr;
-						return true;
+						moved = true;
 					}
 
 					else if (target != col)
 					{
 						table[row][target] = table[row][col];
 						table[row][col] = nullptr;
-						return true;
+						moved = true;
 					}
 				}
 			}
 		}
-		return false;
+		return moved;
 	}
 
 	bool isFull() 
