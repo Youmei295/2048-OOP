@@ -3,11 +3,13 @@
 #include "Tile.h"
 using namespace std;
 
-struct Board
+class Board
 {
+private:
 	static const int SIZE = 4;
 	Tile* table[SIZE][SIZE];
 
+public:
 	Board()
 	{
 		for (int i = 0; i < SIZE; i++)
@@ -22,11 +24,20 @@ struct Board
 				delete table[i][j];
 	}
 
+	Tile* getTile(int row, int col) 
+	{
+		return table[row][col];
+	}
+
+	void setTile(int row, int col, Tile* tile) {
+		table[row][col] = tile;
+	}
+
 	void resetMergeFlag()
 	{
 		for (int i = 0; i < SIZE; i++)
 			for (int j = 0; j < SIZE; j++)
-				if(table[i][j]) 
+				if (table[i][j])
 					table[i][j]->resetMergeFlag();
 	}
 
@@ -45,7 +56,7 @@ struct Board
 	}
 
 	bool move(char dir)
-	{   
+	{
 		bool moved = false;
 		if (dir == 'w' || dir == 'W')
 		{
@@ -65,7 +76,7 @@ struct Board
 						moved = true;
 					}
 
-					else if (!table[target][col]&&target != row)
+					else if (!table[target][col] && target != row)
 					{
 						table[target][col] = table[row][col];
 						table[row][col] = nullptr;
@@ -97,7 +108,7 @@ struct Board
 					{
 						table[target][col] = table[row][col];
 						table[row][col] = nullptr;
-						moved= true;
+						moved = true;
 					}
 				}
 			}
@@ -118,7 +129,7 @@ struct Board
 						table[row][target - 1]->mergeWith(table[row][col]);
 						delete table[row][col];
 						table[row][col] = nullptr;
-						moved= true;
+						moved = true;
 					}
 
 					else if (target != col)
@@ -161,7 +172,7 @@ struct Board
 		return moved;
 	}
 
-	bool isFull() 
+	bool isFull()
 	{
 		for (int row = 0; row < SIZE; row++)
 			for (int col = 0; col < SIZE; col++)
@@ -177,8 +188,8 @@ struct Board
 			{
 				for (int col = 0; col < 4; col++)
 				{
-					if ((col < 3 && table[row][col]->value == table[row][col + 1]->value) ||
-						(row < 3 && table[row][col]->value == table[row + 1][col]->value))
+					if ((col < 3 && table[row][col]->getValue() == table[row][col + 1]->getValue()) ||
+						(row < 3 && table[row][col]->getValue() == table[row + 1][col]->getValue()))
 					{
 						return false;
 					}
@@ -193,7 +204,7 @@ struct Board
 	{
 		for (int row = 0; row < SIZE; row++)
 			for (int col = 0; col < SIZE; col++)
-				if (table[row][col]&&table[row][col]->value == 2048)
+				if (table[row][col] && table[row][col]->getValue() == 2048)
 					return true;
 		return false;
 	}
@@ -203,10 +214,10 @@ struct Board
 		for (int row = 0; row < SIZE; row++)
 		{
 			for (int col = 0; col < SIZE; col++)
-			{   
-				if (table[row][col]) cout << table[row][col]->value;
+			{
+				if (table[row][col]) cout << table[row][col]->getValue();
 				else  cout << " ";
-				 cout<< "    ";
+				cout << "    ";
 			}
 			cout << endl << endl;
 		}
