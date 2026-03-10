@@ -2,19 +2,27 @@
 #include <vector>
 using namespace std;
 
-struct Tile
+class Tile
 {
+private:
 	int value;
 	bool mergedThisTurn;
 
-	Tile(int val = 2) :value(val), mergedThisTurn(false) {};
+public:
+
+	int getValue()
+	{
+		return value;
+	}
+
+	Tile(int val = 2) :value(val), mergedThisTurn(false) {}
 
 	void resetMergeFlag()
 	{
 		mergedThisTurn = false;
 	}
 
-	bool canMergeWith(Tile* otherTile) 
+	bool canMergeWith(Tile* otherTile)
 	{
 		return otherTile && value == otherTile->value && !mergedThisTurn && !otherTile->mergedThisTurn;
 	}
