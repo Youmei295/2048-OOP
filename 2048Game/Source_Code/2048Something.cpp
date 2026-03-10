@@ -9,23 +9,23 @@ int main() {
 
     // Init two random tiles
     int firstX = rand() % 4, firstY = rand() % 4;
-    playTable.table[firstX][firstY] = new Tile(2);
+    playTable.setTile(firstX,firstY,new Tile(2));
 
     int secondX = rand() % 4, secondY = rand() % 4;
     while (secondX == firstX && secondY == firstY)
         secondX = rand() % 4, secondY = rand() % 4;
-    playTable.table[secondX][secondY] = new Tile(2);
+    playTable.setTile(secondX, secondY, new Tile(2));
     sf::Music music;
-    if(!music.openFromFile("amanojaku.wav"))
-        cout<<"Loi roi em nhe!"<<endl;
+    if (!music.openFromFile("amanojaku.wav"))
+        cout << "Loi roi em nhe!" << endl;
     music.play();
     // SFML Window
     sf::RenderWindow window(sf::VideoMode({ 400, 400 }), "2048 - SFML");
 
     sf::Font font;
-    if(!font.openFromFile("OpenSans_Condensed-Bold.ttf")) cout<<"Loi roi em nhe!"<<endl;
+    if (!font.openFromFile("OpenSans_Condensed-Bold.ttf")) cout << "Loi roi em nhe!" << endl;
     while (window.isOpen())
-    {   
+    {
         sf::Event event();
         while (const std::optional event = window.pollEvent())
         {
@@ -52,14 +52,14 @@ int main() {
 
         for (int i = 0; i < 4; ++i)
         {
-            for (int j = 0; j < 4; ++j) 
+            for (int j = 0; j < 4; ++j)
             {
                 sf::RectangleShape cell({ cellSize - 4, cellSize - 4 });
                 cell.setPosition({ j * cellSize + 2, i * cellSize + 2 });
                 cell.setFillColor(sf::Color(200, 200, 200));
 
-                if (playTable.table[i][j]) {
-                    int val = playTable.table[i][j]->value;
+                if (playTable.getTile(i,j)) {
+                    int val = playTable.getTile(i,j)->getValue();
 
                     cell.setFillColor(sf::Color(240, 220 - val * 2, 180));
                     sf::Text text(font);
@@ -74,7 +74,7 @@ int main() {
                     float textTop = textBounds.position.y;
                     float x = j * cellSize + (cellSize - textWidth) / 2.0f - textLeft;
                     float y = i * cellSize + (cellSize - textHeight) / 2.0f - textTop;
-                    text.setPosition({x,y});
+                    text.setPosition({ x,y });
                     window.draw(cell);
                     window.draw(text);
                 }
@@ -99,7 +99,7 @@ int main() {
             sf::sleep(sf::seconds(5));
             return 0;
         }
-        
+
     }
 
     return 0;
